@@ -124,6 +124,28 @@ func TestUnwrapped(t *testing.T) {
 	}
 }
 
+func TestUnwrapFunc(t *testing.T) {
+	original := errors.New("I'm an error")
+	err := Wrap(original)
+
+	if Unwrap(err) != original {
+		t.Fatal("wrong unwrapped result")
+	}
+}
+
+func TestUnwrapNoopNil(t *testing.T) {
+	if Unwrap(nil) != nil {
+		t.Fatal("wrong unwrap result")
+	}
+}
+
+func TestUnwrapNoopUnwrapped(t *testing.T) {
+	err := errors.New("new error here")
+	if Unwrap(err) != err {
+		t.Fatal("wrong unwrap result")
+	}
+}
+
 func TestWithContext(t *testing.T) {
 	err := Wrap(errors.New("I'm an error, no context yet"), "old", "context")
 	err2 := err.WithContext("foo", "bar", "spam", "eggs")

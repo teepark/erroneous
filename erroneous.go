@@ -19,6 +19,15 @@ func Wrap(err error, ctx ...interface{}) Error {
 	}
 }
 
+// Unwrap removes erroneous wrapping if present,
+// or otherwise just returns the original error.
+func Unwrap(err error) error {
+	if e, ok := err.(Error); ok {
+		return e.Unwrap()
+	}
+	return err
+}
+
 // Error is erroneous's extensions to the error interface.
 type Error interface {
 	error
