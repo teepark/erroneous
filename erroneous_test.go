@@ -26,6 +26,14 @@ func TestWrapErrProducesErr(t *testing.T) {
 	}
 }
 
+func TestWrapDoesntDoubleWrap(t *testing.T) {
+	once := Wrap(errors.New("ExplosionError"))
+	twice := Wrap(once)
+	if once != twice {
+		t.Fatal("second wrap wasn't a noop")
+	}
+}
+
 func TestWrapCanAddCtx(t *testing.T) {
 	err := errors.New("your error here")
 	e := Wrap(err, "foo", "bar")

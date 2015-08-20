@@ -8,6 +8,10 @@ func Wrap(err error, ctx ...interface{}) Error {
 		return nil
 	}
 
+	if e, ok := err.(Error); ok {
+		return e
+	}
+
 	return &erroneous{
 		error: err,
 		ctx:   validate(ctx),
