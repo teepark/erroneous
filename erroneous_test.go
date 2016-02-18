@@ -146,6 +146,20 @@ func TestUnwrapNoopUnwrapped(t *testing.T) {
 	}
 }
 
+func TestNew(t *testing.T) {
+	err := New("this is an error")
+	if err.Error() != "this is an error" {
+		t.Fatal("wrong error stringification")
+	}
+}
+
+func TestErrorf(t *testing.T) {
+	err := Errorf("%d things are wrong", 7)
+	if err.Error() != "7 things are wrong" {
+		t.Fatal("wrong error stringification")
+	}
+}
+
 func TestWithContext(t *testing.T) {
 	err := Wrap(errors.New("I'm an error, no context yet"), "old", "context")
 	err2 := err.WithContext("foo", "bar", "spam", "eggs")

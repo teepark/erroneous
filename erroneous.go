@@ -1,6 +1,11 @@
 package erroneous
 
-import "gopkg.in/stack.v1"
+import (
+	"errors"
+	"fmt"
+
+	"gopkg.in/stack.v1"
+)
 
 // Wrap produces an Error from any existing error.
 func Wrap(err error, ctx ...interface{}) Error {
@@ -26,6 +31,24 @@ func Unwrap(err error) error {
 		return e.Unwrap()
 	}
 	return err
+}
+
+// New is a shortcut for erroneous.Wrap(errors.New()).
+func New(text string) Error {
+	return &erroneous{
+		error: errors.New(text),
+		ctx:   []interface{}{},
+		stack: stack.Trace()[1:].TrimRuntime(),
+	}
+}
+
+// Errorf is a shortcut for erroneous.Wrap(fmt.Errorf()).
+func Errorf(format string, a ...interface{}) Error {
+	return &erroneous{
+		error: fmt.Errorf(format, a...),
+		ctx:   []interface{}{},
+		stack: stack.Trace()[1:].TrimRuntime(),
+	}
 }
 
 // Error is erroneous's extensions to the error interface.
